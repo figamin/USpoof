@@ -7,7 +7,27 @@ USpoof is a GPS spoofing bot for SuperFanU based programs.
   - Google Maps preview of event location
   - Randomized platform, device UUID, and GPS Location
   - Support for 20 schools (suggestions are welcome)
-
+### Supported School List
+- UMass Lowell
+- Drake University
+- College of St. Rose
+- Harvard University
+- Boston University
+- University of Maine
+- Southeast Missouri State University
+- California State University
+- University of Toledo
+- Lee University
+- Fairfield University
+- Wichita State University
+- University of Kentucky
+- University of North Carolina at Charlotte
+- University of Pennsylvania
+- University of Hawaii at Manoa
+- Minot State University
+- Grand Valley State University
+- Keene State College
+- University of North Carolina at Pembroke
 ### Preview
 ```
 Logging in with username IanA57 at school ID 694...
