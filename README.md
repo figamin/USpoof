@@ -5,7 +5,7 @@ USpoof is a GPS spoofing bot for SuperFanU based programs.
   - Automatically fetches events and checks into them
   - Live event countdown
   - Google Maps preview of event location
-  - Randomized platform, device UUID, and GPS Location
+  - Randomized platform, device UUID, check in time, and GPS Location
   - Support for 20 schools (suggestions are welcome)
 ### Supported School List
 - UMass Lowell
