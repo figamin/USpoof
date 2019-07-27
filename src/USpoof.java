@@ -36,7 +36,7 @@ public class USpoof {
      */
     public static void main(String[] args) throws IOException
     {
-        System.out.println("Welcome to USpoof Beta 1.0\nBy Ian Anderson, 2019");
+        System.out.println("Welcome to USpoof 1.0\nBy Ian Anderson, 2019");
         Scanner scan = new Scanner(System.in);
         rand = new Random();
         System.out.println("Enter your username:");
