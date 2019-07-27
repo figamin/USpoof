@@ -3,9 +3,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,40 +15,57 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class USpoof {
-    OkHttpClient client;
-    Random rand;
-    String user;
-    String pass;
-    String nid;
-    String platform;
-    String uuid;
-    String loginKey = "";
-    List<String> eventIDs = new ArrayList<>();
-    List<String> eventDescriptions = new ArrayList<>();
-    List<String> pointValues = new ArrayList<>();
-    List<LocalDateTime> startTimes = new ArrayList<>();
-    List<LocalDateTime> endTimes = new ArrayList<>();
-    List<Double> generatedLatitidues = new ArrayList<>();
-    List<Double> generatedLongitudes = new ArrayList<>();
+    private static OkHttpClient client;
+    private static Random rand;
+    private static String user;
+    private static String pass;
+    private static String nid;
+    private static String platform;
+    private static String uuid;
+    private static String loginKey = "";
+    private static List<String> eventIDs = new ArrayList<>();
+    private static List<String> eventDescriptions = new ArrayList<>();
+    private static List<String> pointValues = new ArrayList<>();
+    private static List<LocalDateTime> startTimes = new ArrayList<>();
+    private static List<LocalDateTime> endTimes = new ArrayList<>();
+    private static List<Double> generatedLatitidues = new ArrayList<>();
+    private static List<Double> generatedLongitudes = new ArrayList<>();
     /**
      * USpoof: A SuperFanU Spoofer
-     * @param userN username
-     * @param passN password
-     * @param nidN school id
      * @throws IOException
      */
-    public USpoof() throws IOException
+    public static void main(String[] args) throws IOException
     {
         System.out.println("Welcome to USpoof Beta 1.0\nBy Ian Anderson, 2019");
         Scanner scan = new Scanner(System.in);
+        rand = new Random();
         System.out.println("Enter your username:");
         user = scan.nextLine();
         System.out.println("Enter your password:");
         pass = scan.nextLine();
+        // nid changes school
         System.out.println("Select your school:\n" +
-                "1. UMass Lowell\n" +
-                "2. Drake University\n" +
-                "3. College of St. Rose");
+                "1.  UMass Lowell\n" +
+                "2.  Drake University\n" +
+                "3.  College of St. Rose\n" +
+                "4.  Harvard University\n" +
+                "5.  Boston University\n" +
+                "6.  University of Maine\n" +
+                "7.  Southeast Missouri State University\n" +
+                "8.  California State University\n" +
+                "9.  University of Toledo\n" +
+                "10. Lee University\n" +
+                "11. Fairfield University\n" +
+                "12. Wichita State University\n" +
+                "13. University of Kentucky\n" +
+                "14. University of North Carolina at Charlotte\n" +
+                "15. University of Pennsylvania\n" +
+                "16. University of Hawaii at Manoa\n" +
+                "17. Minot State University\n" +
+                "18. Grand Valley State University\n" +
+                "19. Keene State College\n" +
+                "20. University of North Carolina at Pembroke\n" +
+                "0.  Manual NID Entry");
         switch (scan.nextInt())
         {
             case 1: nid = "694";
@@ -60,13 +74,51 @@ public class USpoof {
             break;
             case 3: nid = "447";
             break;
+            case 4: nid = "50";
+            break;
+            case 5: nid = "51";
+            break;
+            case 6: nid = "10";
+            break;
+            case 7: nid = "8";
+            break;
+            case 8: nid = "103";
+            break;
+            case 9: nid = "112";
+            break;
+            case 10: nid = "114";
+            break;
+            case 11: nid = "20";
+            break;
+            case 12: nid = "21";
+            break;
+            case 13: nid = "119";
+            break;
+            case 14: nid = "124";
+            break;
+            case 15: nid = "28";
+            break;
+            case 16: nid = "547";
+            break;
+            case 17: nid = "128";
+            break;
+            case 18: nid = "412";
+            break;
+            case 19: nid = "175";
+            break;
+            case 20: nid = "185";
+            break;
+            default: System.out.println("Enter custom number:");
+            scan.nextLine();
+            nid = scan.nextLine();
+            break;
         }
-        // nid changes school
-        platform = "Android";
-        // no idea what determines this
-        uuid = "9956be6596eae6cf";
+        // select platform
+        final String[] possiblePlatforms = {"iOS", "Android"};
+        platform = possiblePlatforms[rand.nextInt(possiblePlatforms.length)];
+        // generate uuid
+        uuid = generateUUID();
         client = new OkHttpClient();
-        rand = new Random();
         logIn();
         getFeed();
         eventPrinter();
@@ -91,14 +143,13 @@ public class USpoof {
                     }
                     checkIn(eventIDs.get(0));
                     eventIDs.remove(0);
+                    eventDescriptions.remove(0);
+                    pointValues.remove(0);
+                    startTimes.remove(0);
+                    endTimes.remove(0);
+                    generatedLatitidues.remove(0);
+                    generatedLongitudes.remove(0);
                 }
-                eventIDs.clear();
-                eventDescriptions.clear();
-                pointValues.clear();
-                startTimes.clear();
-                endTimes.clear();
-                generatedLatitidues.clear();
-                generatedLongitudes.clear();
                 getFeed();
             }
 
@@ -108,7 +159,19 @@ public class USpoof {
             e.printStackTrace();
         }
     }
-    private void logIn() throws IOException
+    private static String generateUUID()
+    {
+
+        String validChars = "0123456789abcdefghijklmnopqrstuvxyz";
+        StringBuilder uuidBuilder = new StringBuilder(16);
+
+        for (int i = 0; i < 16; i++)
+        {
+            uuidBuilder.append(validChars.charAt(rand.nextInt(validChars.length())));
+        }
+        return uuidBuilder.toString();
+    }
+    private static void logIn() throws IOException
     {
         System.out.println("Logging in with username " + user + " at school ID " + nid + "...");
         RequestBody loginToU = new FormBody.Builder()
@@ -138,7 +201,7 @@ public class USpoof {
             loginKey = data.getJSONObject(i).getString("login_key");
         }
     }
-    private void getFeed() throws IOException
+    private static void getFeed() throws IOException
     {
         System.out.println("Getting feed...");
         Request feed = new Request.Builder()
@@ -165,6 +228,11 @@ public class USpoof {
                 events.add(current);
             }
         }
+        if(events.isEmpty())
+        {
+            System.out.println("No events currently. Check again later!");
+            System.exit(0);
+        }
         for(JSONObject e: events)
         {
             eventIDs.add(e.getString("eid"));
@@ -172,10 +240,9 @@ public class USpoof {
             pointValues.add(e.getString("pointvalue"));
             startTimes.add(LocalDateTime.parse(e.getString("starttime"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).plusHours(1));
             endTimes.add(LocalDateTime.parse(e.getString("endtime"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).plusHours(1));;
-            //System.out.println(e.toString());
         }
     }
-    private void eventPrinter() throws IOException
+    private static void eventPrinter() throws IOException
     {
         for(int i = 0; i < eventIDs.size(); i++)
         {
@@ -193,7 +260,6 @@ public class USpoof {
                     .get()
                     .build();
             Response eventResponse = client.newCall(currentEvent).execute();
-            //System.out.println(eventResponse.body().string());
             JSONObject eventJSON = new JSONObject(eventResponse.body().string());
             JSONObject data3 = eventJSON.getJSONArray("data").getJSONObject(0).getJSONObject("event").getJSONArray("venues").getJSONObject(0);
             String lattude = data3.getString("latitude");
@@ -217,10 +283,9 @@ public class USpoof {
                     TimeUnit.MILLISECONDS.toMinutes(millis) -
                             TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)));
             System.out.println("Event starts in " + timeUntil + ".\n");
-            //startLDTs.add(startIn);
         }
     }
-    private void checkIn(String eventID) throws IOException
+    private static void checkIn(String eventID) throws IOException
     {
         RequestBody checkInToU = new FormBody.Builder()
                 .add("eid", eventID)
